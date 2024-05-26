@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Transliteration</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+
+  <body>
+    <div class="container">
+      <h1>English to Kannada Transliteration</h1>
+      <div class="container">
+        <textarea
+          id="inputArea"
+          name="inputArea"
+          class="inputArea"
+          rows="8"
+        ></textarea>
+      </div>
+      <div id="menuDiv" class="menuDiv">
+        <div id="menuWord" class="popupDiv menuWord"></div>
+        <div id="suggestions"></div>
+      </div>
+    </div>
+    <div class="container-small">
+      <button id="sugButton" class="button type1">+ Add suggestion</button>
+      <a href="adminAuth.html" class="button type1">Admin login</a>
+    </div>
+
+    <div class="overlay">
+      <div
+        class="popup-form"
+        role="dialog"
+        aria-labelledby="addSuggestionTitle"
+        aria-hidden="true"
+      >
+        <h2 id="addSuggestionTitle">Add Suggestion</h2>
+        <form id="suggestionForm" action="/submit" method="post">
+          <label for="englishSuggestion">English:</label>
+          <input
+            type="text"
+            id="englishSuggestion"
+            name="englishSug"
+            aria-required="true"
+            placeholder="Enter English suggestion"
+            required
+          />
+          <br />
+          <label for="kannadaSuggestion">Kannada:</label>
+          <input
+            type="text"
+            id="kannadaSuggestion"
+            name="kannadaSug"
+            aria-required="true"
+            placeholder="Enter Kannada suggestion"
+            required
+          />
+          <br />
+          <div class="container-small">
+            <button type="submit" id="submitButton" class="button type2">
+              Submit
+            </button>
+            <button id="closePopup" class="button type2">Close</button>
+          </div>
+        </form>
+      </div>
+    </div>
+    <script>
+      const sugButton = document.getElementById("sugButton");
+      const popupFormOverlay = document.querySelector(".overlay");
+      const closePopupButton = document.getElementById("closePopup");
+      const submitButton = document.getElementById("submitButton");
+      const kanSug = document.getElementById("kannadaSuggestion");
+      const engSug = document.getElementById("englishSuggestion");
+
+      // Open popup form on button click
+      sugButton.addEventListener("click", function (e) {
+        e.preventDefault();
+        popupFormOverlay.style.display = "flex"; // Show the form
+      });
+
+      // Close popup form on close button click
+      closePopupButton.addEventListener("click", function (e) {
+        e.preventDefault();
+        popupFormOverlay.style.display = "none"; // Hide the form
+      });
+
+      // Handle form submission
+      submitButton.addEventListener("click", suggestionSubmit);
+    </script>
+    <script src=../dist/bundle.js></script>
+  </body>
+</html>
