@@ -141,7 +141,7 @@ update.addEventListener('click', () => {
 	data.toString();
 	console.log(data);
 	// Sending a POST request using Fetch API
-	fetch('http://localhost:3000/data', {
+	fetch('http://localhost:8080/data', {
 		method: 'POST',
 		headers: {
 			'Content-Type': 'application/json'
@@ -156,5 +156,3 @@ update.addEventListener('click', () => {
 			console.error('Error:', error);
 		});
 });
-
-
