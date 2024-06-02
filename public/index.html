@@ -37,7 +37,7 @@
         aria-hidden="true"
       >
         <h2 id="addSuggestionTitle">Add Suggestion</h2>
-        <form id="suggestionForm" action="/submit" method="post">
+        <!--<form id="suggestionForm" action="/submit" method="post">-->
           <label for="englishSuggestion">English:</label>
           <input
             type="text"
@@ -59,12 +59,12 @@
           />
           <br />
           <div class="container-small">
-            <button type="submit" id="submitButton" class="button type2">
+            <button id="submitButton" class="button type2">
               Submit
             </button>
             <button id="closePopup" class="button type2">Close</button>
           </div>
-        </form>
+        <!--</form>-->
       </div>
     </div>
     <script>
@@ -88,7 +88,28 @@
       });
 
       // Handle form submission
-      submitButton.addEventListener("click", suggestionSubmit);
+      //submitButton.addEventListener("click", suggestionSubmit);
+
+      submitButton.addEventListener("click", function(e){
+        e.preventDefault();
+        const data = {englishSug:engSug, kannadaSug:kanSug}.toString();
+        fetch('http://localhost:8080/submit', {
+          mode:'no-cors',
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(data)
+        })
+          .then(response => response.text())
+          .then(data => {
+            console.log('Success:', data);
+          })
+          .catch((error) => {
+            console.log('Error:', error);
+          });
+        popupFormOverlay.style.display = 'none';
+      });
     </script>
     <script src=../dist/bundle.js></script>
   </body>
