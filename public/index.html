@@ -88,28 +88,43 @@
       });
 
       // Handle form submission
-      //submitButton.addEventListener("click", suggestionSubmit);
+      submitButton.addEventListener("click", suggestionSubmit);
 
-      submitButton.addEventListener("click", function(e){
-        e.preventDefault();
-        const data = {englishSug:engSug, kannadaSug:kanSug}.toString();
-        fetch('http://localhost:8080/submit', {
-          mode:'no-cors',
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify(data)
-        })
-          .then(response => response.text())
-          .then(data => {
-            console.log('Success:', data);
-          })
-          .catch((error) => {
-            console.log('Error:', error);
-          });
-        popupFormOverlay.style.display = 'none';
-      });
+      async function suggestionSubmit(event) {
+        if (!kanSug.value || !engSug.value) {
+            alert("enter");
+            event.preventDefault();
+        }
+        let kannadaSuggestion = kanSug.value;
+        let englishSuggestion = engSug.value;
+
+        /*if (words[kannadaSuggestion]) {
+            alert("Your Suggestion already exists in the corpus so won't be added");
+            return;
+        } else {*/
+          try {
+              const response = await fetch('http://localhost:5000', {
+                  method: 'POST',
+                  headers: {
+                      'Content-Type': 'application/json'
+                  },
+                  body: JSON.stringify({
+                      englishSuggestion: englishSuggestion,
+                      kannadaSuggestion: kannadaSuggestion
+                  })
+              });
+
+              if (response.ok) {
+                  console.log("Suggestion Successfully submitted!!");
+              } else {
+                  const errorData = await response.json();
+                  console.error('Error submitting suggestion: ', errorData);
+              }
+          } catch (error) {
+              console.error('Error: ', error);
+          }
+
+    }
     </script>
     <script src=../dist/bundle.js></script>
   </body>

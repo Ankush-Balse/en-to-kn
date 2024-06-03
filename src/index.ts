@@ -518,7 +518,7 @@ const suggestionSchema: Schema = new Schema({
 }, { versionKey: false });
 
 // Create the model
-const tempSuggestions: Model<ISuggestion> = model<ISuggestion>('tempsuggestions', suggestionSchema);
+// const tempSuggestions: Model<ISuggestion> = model<ISuggestion>('tempsuggestions', suggestionSchema);
 
 // Connect to MongoDB
 mongoose.connect("mongodb+srv://kalasapuraamogh:9RGdqQ3uRiKQCBoR@cluster0.wzmox0b.mongodb.net/transliteration?retryWrites=true&w=majority&appName=Cluster0")
@@ -530,31 +530,33 @@ mongoose.connect("mongodb+srv://kalasapuraamogh:9RGdqQ3uRiKQCBoR@cluster0.wzmox0
 
 // Post processing on clicking submit
 async function suggestionSubmit(event: Event) {
-    event.preventDefault();
-    
     if (!kanSug.value || !engSug.value) {
-        alert("Please enter both Kannada and English suggestions.");
-        return;
+        alert("enter");
+        event.preventDefault();
     }
+    let kannadaSuggestion = kanSug.value;
+    let englishSuggestion = engSug.value;
 
-    try {
-        const kannadaSuggestion = kanSug.value;
-        const englishSuggestion = engSug.value;
-
-        const present = await tempSuggestions.findOne({ englishWord: englishSuggestion, kannadaWord: kannadaSuggestion });
-
-        if (present) {
-            console.log("Suggestion already present");
-        } else {
-            const newSuggestion = new tempSuggestions({ englishWord: englishSuggestion, kannadaWord: kannadaSuggestion });
-            await newSuggestion.save();
-            console.log("Suggestion saved");
+    if (words[kannadaSuggestion]) {
+        alert("Your Suggestion already exists in the corpus so won't be added");
+        return;
+    } else {
+        try {
+            const response = await axios.post('http://localhost:5000', {
+                englishSuggestion: englishSuggestion,
+                kannadaSuggestion: kannadaSuggestion
+            });
+            if (response.status == 200) {
+                console.log("Suggestion Successfully submitted!!");
+            } else {
+                console.error('Error submitting suggestion: ',response.data);
+            }
+        } catch (error) {
+            console.error('Error: ',error);
         }
-    } catch (err) {
-        alert("Error occurred. Please try later!");
-        console.error(err);
     }
 }
+
 
 // Open popup form on button click
 sugButton.addEventListener('click', function (e) {

@@ -12,7 +12,7 @@ load_dotenv()
 app.config["MONGO_URI"] = os.getenv("MONGODB_URL")
 mongodb_client = PyMongo(app)
 db = mongodb_client.db
-temp_words = db['tempSuggestions']
+temp_words = db['tempsuggestions']
 words_collection = db['suggestions']
 
 @app.route('/', methods=["POST","GET"])
@@ -50,4 +50,4 @@ def index():
         return "Error: "+str(e)
 
 if __name__=="__main__":
-    app.run(debug=True, port=3000)
+    app.run(debug=True, port=5000)
